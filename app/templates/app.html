@@ -1,0 +1,146 @@
+<html>
+
+  <head>
+	  <title>{{env.TITLE}}</title>
+	<script>
+
+		function previewFile(){
+			var preview = document.getElementById('img'); 
+			var file    = document.getElementById('uploaded').files[0]; 
+			var reader  = new FileReader();
+
+			reader.onloadend = function () {
+			   preview.src = reader.result;
+			}
+
+			if (file) {
+			   reader.readAsDataURL(file); //reads the data as a URL
+			} else {
+			   preview.src = "";
+			}
+		}
+		function updateimg(){
+			url = document.getElementById('url').value;
+			document.getElementById('img').src = url;
+		}
+		function chooseCallback(){
+			var uploaded =  document.getElementById('uploaded').files[0];
+			if(uploaded){
+				doPostCallback(uploaded);
+			} else {
+				doGetCallback();
+			}
+		}
+		function doPostCallback(uploaded){
+			console.log(uploaded);
+			fetch("/classify-url", {
+			  method: "POST",
+			  body: uploaded
+			}).then(res => {
+				return res.json().then(obj=> {
+					console.log("deeep",obj);
+				    var top_prediction = obj.predictions[0][0];
+				    set_label(top_prediction);
+				})
+			});
+		}
+		function doGetCallback() {
+			imgUrl = document.getElementById('url').value;
+			var xmlhttp = new XMLHttpRequest();
+			var url = "/classify-url?url=" + encodeURIComponent(imgUrl);
+			xmlhttp.open('GET', url, true);
+			xmlhttp.onreadystatechange = function() {
+			    if (xmlhttp.readyState == 4) {
+				if(xmlhttp.status == 200) {
+				    var obj = JSON.parse(xmlhttp.responseText);
+				    var top_prediction = obj.predictions[0][0];
+					console.log(obj);
+				    set_label(top_prediction);
+					console.log("calling set label with", top_prediction);
+				 }
+			    }
+			};
+			xmlhttp.send(null);
+		}
+		function set_label(tp){
+			console.log("running set label with", tp);
+			document.getElementById('results').textContent = tp;
+		}
+	</script>
+    <style>
+      html, body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+      }
+      #label{
+	      font-size: 32px;
+      }
+      .flex-container {
+	  display: flex;
+	  flex-direction: column;
+	  justify-content: top;
+          align-items: center;     /* center items horizontally, in this case */
+	  height: 800px;
+	}
+	.row {
+		width: 500px;
+		margin: 5px;
+		text-align: center;     /* will center text in <p>, which is not a flex item */
+	}
+	#img{
+		height: 480px;
+	}
+	#url{
+		width: 100%
+	}
+    </style>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+</head>
+  </head>
+  <body>
+    <div class="flex-container">
+      <div class="row">
+        <div class="flex-item">
+		<h2>{{env.TITLE}}</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="flex-item">
+		<h4>{{env.SUBTITLE}}</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="flex-item">
+	    <div id="img-container">
+		    <figure>
+		      <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw" id="img"/>
+		    </figure>
+	    </div>
+        </div>
+      </div>
+      <div id="url-container" class="row">
+        <input type="text" id="url" placeholder="http://somewhere.com/something.jpg" onchange="updateimg()" onpaste="this.onchange()" oninput="this.onchange()"/>
+      </div>
+      <div id="or-container" class="row">
+	      <span id="or">-- or --</span>
+      </div>
+      <div id="uploaded-container" class="row">
+	<input type="file" id="uploaded" name="uploaded" accept="image/*" onchange="previewFile()"/>
+      </div>
+      <div id="results-container" class="row">
+	      <div id="results"></div>
+      </div>
+  
+      <div id="button-container" class="row">
+        <button id="button" onclick="chooseCallback()">Classify</button>
+      </div>
+    </div>
+  </body>
+</html>
+<!-- vim: set ts=2 sw=2 -->

@@ -1,0 +1,14 @@
+#list dockers
+sudo docker ps
+
+#build new docker
+sudo docker build -t test_app .
+
+#delete old docker container
+docker rm -f $containerName
+
+#run new one
+sudo docker run -p 80:80 -v root/fastai-vision-uvicorn-gunicorn-starlette-docker/app/export.pkl -e TITLE="AI Waste Classification" -e SUBTITLE="Classifies trash, paper, plastic, metal, cardboard and glass" wastesorter_app
+
+
+sudo docker stop wasterSorter_app
