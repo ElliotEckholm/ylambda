@@ -1,2 +1,2 @@
-docker stop v2h
-docker rm v2h
+sudo docker stop ylambda
+sudo docker rm ylambda

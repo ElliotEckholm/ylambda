@@ -1,1 +1,1 @@
-docker build -t test1 .
+sudo docker build -t ylambda_app .
