@@ -17,6 +17,12 @@ import asyncio
 
 import os
 
+
+
+class Homepage(HTTPEndpoint):
+    async def get(self, request):
+        return JSONResponse({"Welcome": "to YLambda"})
+
 class Prxmty(HTTPEndpoint):
     async def get(self, request):
         return JSONResponse({"response": "nothing"})
@@ -29,7 +35,8 @@ class PrxmtyTest(HTTPEndpoint):
 
 routes = [
     Route("/prxmty", Prxmty),
-    Route("/prxmty/{username}", PrxmtyTest)
+    Route("/prxmty/{username}", PrxmtyTest),
+    Route("/", Homepage)
 ]
 
 app = Starlette(routes=routes)
