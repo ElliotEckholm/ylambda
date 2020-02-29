@@ -83,12 +83,12 @@ class OptionsResponse(Response):
     }
 
 
-@app.route("/classify-url", methods=["OPTIONS"])
+@app.route("/sortai/classify-url", methods=["OPTIONS"])
 async def classify_url(request):
     headers = {'Allow': 'OPTIONS, GET, POST'}
     return OptionsResponse(None)
 
-@app.route("/classify-url", methods=["GET"])
+@app.route("/sortai/classify-url", methods=["GET"])
 async def classify_url(request):
     bytes = await get_bytes(request.query_params["url"])
     img = open_image(BytesIO(bytes))
@@ -101,7 +101,7 @@ async def classify_url(request):
             reverse=True
         )})
 
-@app.route("/classify-url", methods=["POST"])
+@app.route("/sortai/classify-url", methods=["POST"])
 async def classify_url(request):
     bytes = await request.body()
     img = open_image(BytesIO(bytes))

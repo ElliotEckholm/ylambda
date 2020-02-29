@@ -5,8 +5,8 @@
 	<script>
 
 		function previewFile(){
-			var preview = document.getElementById('img'); 
-			var file    = document.getElementById('uploaded').files[0]; 
+			var preview = document.getElementById('img');
+			var file    = document.getElementById('uploaded').files[0];
 			var reader  = new FileReader();
 
 			reader.onloadend = function () {
@@ -33,7 +33,7 @@
 		}
 		function doPostCallback(uploaded){
 			console.log(uploaded);
-			fetch("/classify-url", {
+			fetch("/sortai/classify-url", {
 			  method: "POST",
 			  body: uploaded
 			}).then(res => {
@@ -47,7 +47,9 @@
 		function doGetCallback() {
 			imgUrl = document.getElementById('url').value;
 			var xmlhttp = new XMLHttpRequest();
-			var url = "/classify-url?url=" + encodeURIComponent(imgUrl);
+			var url = "/sortai/classify-url?url=" + encodeURIComponent(imgUrl);
+      console.log("\n\n\nURL");
+      console.log(url);
 			xmlhttp.open('GET', url, true);
 			xmlhttp.onreadystatechange = function() {
 			    if (xmlhttp.readyState == 4) {
@@ -136,7 +138,7 @@
       <div id="results-container" class="row">
 	      <div id="results"></div>
       </div>
-  
+
       <div id="button-container" class="row">
         <button id="button" onclick="chooseCallback()">Classify</button>
       </div>
