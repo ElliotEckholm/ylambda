@@ -7,6 +7,7 @@ RUN pip install starlette
 RUN pip install requests
 RUN pip install aiofiles
 RUN pip install uvicorn
+RUN pip install python-multipart
 
 
 COPY ./app /app

@@ -116,3 +116,20 @@ async def classify_url(request):
             reverse=True
 
         )})
+
+@app.route("/sortai/upload/classify-url", methods=["POST"])
+async def classify_url(request):
+    form = await request.form()
+    contents = await form["file"].read()
+    img = open_image(BytesIO(contents))
+    learner = load_learner(Path("/app"))
+    _,_,losses = learner.predict(img)
+
+    #
+    return JSONResponse({
+        "predictions": sorted(
+            zip(learner.data.classes, map(float, losses)),
+            key=lambda p: p[1],
+            reverse=True
+
+        )})

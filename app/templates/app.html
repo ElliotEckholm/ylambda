@@ -24,6 +24,8 @@
 			document.getElementById('img').src = url;
 		}
 		function chooseCallback(){
+      console.log("\n\nUploaded");
+      console.log(document.getElementById('uploaded'));
 			var uploaded =  document.getElementById('uploaded').files[0];
 			if(uploaded){
 				doPostCallback(uploaded);
@@ -38,6 +40,7 @@
 			  body: uploaded
 			}).then(res => {
 				return res.json().then(obj=> {
+          console.log(res);
 					console.log("deeep",obj);
 				    var top_prediction = obj.predictions[0][0];
 				    set_label(top_prediction);
