@@ -11,11 +11,13 @@ from starlette.endpoints import HTTPEndpoint
 from starlette.routing import Route
 
 import uvicorn
+import ssl
 
 import aiohttp
 import asyncio
 
 import os
+
 
 
 
@@ -50,6 +52,7 @@ routes = [
 ]
 
 app = Starlette(routes=routes)
+
 
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
@@ -143,3 +146,15 @@ async def classify_url(request):
             reverse=True
 
         )})
+
+
+# if __name__ == "__main__":
+#     uvicorn.run(
+#         app,
+#         host="0.0.0.0",
+#         port=8433,
+#         ssl_version=ssl.PROTOCOL_SSLv23,
+#         cert_reqs=ssl.CERT_OPTIONAL,
+#         ssl_keyfile="./key.pem",        # Note that the generated certificates
+#         ssl_certfile="./cert.pem",      # are used here
+#     )
