@@ -33,10 +33,20 @@ class PrxmtyTest(HTTPEndpoint):
         username = request.path_params['username']
         return JSONResponse({"response": username})
 
+
+class ssl_1(HTTPEndpoint):
+    async def get(self, request):
+        return PlainTextResponse('mH9DG5WOZZ88zdHIadY8tmpAF7vN0hlA-eOacxKZWY8.OZYrtZyO4-aleWRr-Oxr-bGCxTMjo4wGDXuMJVfJO9k')
+class ssl_2(HTTPEndpoint):
+    async def get(self, request):
+        return PlainTextResponse('aTfdidt2g9I9jR4Nez2tvXitRRlne-ufd196Rzkv5aM.OZYrtZyO4-aleWRr-Oxr-bGCxTMjo4wGDXuMJVfJO9k')
+
 routes = [
     Route("/prxmty", Prxmty),
     Route("/prxmty/{username}", PrxmtyTest),
-    Route("/", Homepage)
+    Route("/", Homepage),
+    Route("/.well-known/acme-challenge/mH9DG5WOZZ88zdHIadY8tmpAF7vN0hlA-eOacxKZWY8", ssl_1),
+    Route("/.well-known/acme-challenge/aTfdidt2g9I9jR4Nez2tvXitRRlne-ufd196Rzkv5aM", ssl_2)
 ]
 
 app = Starlette(routes=routes)
